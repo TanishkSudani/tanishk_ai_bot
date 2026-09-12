@@ -1,3 +1,0 @@
--keep class com.tanishk.aibot.** { *; }
--keepattributes Signature
--keepattributes *Annotation*

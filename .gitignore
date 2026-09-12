@@ -12,6 +12,7 @@
 .swiftpm/
 migrate_working_dir/
 .gradle/
+android_native_backup/
 
 # IntelliJ related
 *.iml

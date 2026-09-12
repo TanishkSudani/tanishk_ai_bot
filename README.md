@@ -11,14 +11,41 @@ Download the ready-to-install Android Release APK directly on your phone:
 - 🚀 **[Click Here to Download APK (v1.0.0)](https://github.com/TanishkSudani/tanishk_ai_bot/raw/main/releases/tanishk_ai_bot_v1.0.apk)** *(Size: 21.3 MB)*
 - Once downloaded on your Android phone, tap the file and click **Install**.
 
-### 🌐 2. Web (Chrome / Browser)
+### 🍏 2. iPhone / iOS Guide (Complete Step-by-Step)
+
+Because Apple restricts direct `.apk` downloads, you have **3 simple ways** to run this app on any iPhone or iPad:
+
+#### 🔹 Method A: Instant Home Screen App (PWA — Recommended for All Users)
+*No Mac or Apple Developer Account needed. Works on 100% of iPhones:*
+1. Open the hosted Web App URL in **Safari** on your iPhone.
+2. Tap the **Share** button at the bottom of the screen (square box with an arrow pointing up).
+3. Scroll down in the menu and tap **"Add to Home Screen"** (`+`).
+4. Tap **"Add"** in the top right corner.
+5. **Done!** The **Tanishk AI Bot** app icon will appear directly on your iPhone home screen. When tapped, it opens in full-screen mode like an App Store app with smooth animations, no browser bars, and full functionality!
+
+#### 🔹 Method B: Cloud-Built iOS Package (.IPA from GitHub Actions)
+*Built automatically using GitHub's macOS cloud servers:*
+1. Go to the [Actions Tab](https://github.com/TanishkSudani/tanishk_ai_bot/actions) in this repository.
+2. Click on the latest workflow run: **Flutter Multiplatform Build**.
+3. Under the **Artifacts** section at the bottom, download **`ios-ipa-build`**.
+4. Extract the ZIP to get `tanishk_ai_bot_ios.ipa`.
+5. Sideload onto any iPhone using tools like **AltStore**, **Sideloadly**, or **Apple Configurator**.
+
+#### 🔹 Method C: Running Locally on Mac / Xcode (For Developers)
+*If you have a Mac laptop/desktop:*
+```bash
+git clone https://github.com/TanishkSudani/tanishk_ai_bot.git
+cd tanishk_ai_bot
+flutter pub get
+open ios/Runner.xcworkspace
+```
+Select your connected iPhone or iOS Simulator in Xcode and press **▶ Run** (or run `flutter run -d ios`).
+
+---
+
+### 🌐 3. Web (Chrome / Browser)
 Use the app directly in your desktop or mobile browser without any installation:
 - Run locally with `flutter run -d chrome --web-port=1000` or host on GitHub Pages/Firebase.
-
-### 🍏 3. iPhone / iOS (Web App / PWA)
-- Open the Web app link in **Safari on your iPhone**.
-- Tap the **Share** button at the bottom and select **"Add to Home Screen"**.
-- The app icon will appear on your iPhone screen and run in full-screen like a native iOS app!
 
 ---
 

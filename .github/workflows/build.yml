@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-android-web:
     name: Build Android APK and Web
     runs-on: ubuntu-latest
 
@@ -48,3 +48,35 @@ jobs:
         with:
           name: web-build
           path: build/web/
+
+  build-ios:
+    name: Build iOS (Simulator & No-codesign App)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build iOS App
+        run: flutter build ios --release --no-codesign
+
+      - name: Package iOS App
+        run: |
+          mkdir -p build/ios/iphoneos/Payload
+          cp -r build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload/
+          cd build/ios/iphoneos && zip -r tanishk_ai_bot_ios.ipa Payload
+
+      - name: Upload iOS IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa-build
+          path: build/ios/iphoneos/tanishk_ai_bot_ios.ipa

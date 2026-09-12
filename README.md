@@ -4,20 +4,38 @@ Smart AI Voice Calling & WhatsApp Business Assistant for Android, iOS, and Web (
 
 ---
 
-## 📥 Direct Downloads & Links
+## 📥 Direct Click-to-Run Links
+
+| Platform | Direct Action Link | Details |
+| :--- | :--- | :--- |
+| 📱 **Android Phone** | 👉 **[Click Here to Download Android APK](https://github.com/TanishkSudani/tanishk_ai_bot/raw/main/releases/tanishk_ai_bot_v1.0.apk)** | Direct download & install on Android *(21.3 MB)* |
+| 🌐 **Web (Chrome / Browser)** | 👉 **[Click Here to Open & Run in Browser](https://tanishksudani.github.io/tanishk_ai_bot/)** | Instant full-featured web app in any browser |
+| 🍏 **iPhone / iOS** | 👉 **[Click Here to Run in your iPhone](https://tanishksudani.github.io/tanishk_ai_bot/)** | Opens in Safari → Tap Share → Add to Home Screen |
+| 📦 **iOS Native IPA** | 👉 **[Click Here to Download iOS .IPA Package](https://github.com/TanishkSudani/tanishk_ai_bot/actions)** | Cloud-built native IPA package from GitHub Actions |
+
+---
 
 ### 📱 1. Android (APK)
 Download the ready-to-install Android Release APK directly on your phone:
-- 🚀 **[Click Here to Download APK (v1.0.0)](https://github.com/TanishkSudani/tanishk_ai_bot/raw/main/releases/tanishk_ai_bot_v1.0.apk)** *(Size: 21.3 MB)*
+- 🚀 **[Click Here to Download Android APK (v1.0.0)](https://github.com/TanishkSudani/tanishk_ai_bot/raw/main/releases/tanishk_ai_bot_v1.0.apk)** *(Size: 21.3 MB)*
 - Once downloaded on your Android phone, tap the file and click **Install**.
 
-### 🍏 2. iPhone / iOS Guide (Complete Step-by-Step)
+---
 
-Because Apple restricts direct `.apk` downloads, you have **3 simple ways** to run this app on any iPhone or iPad:
+### 🌐 2. Web (Chrome / Edge / Firefox)
+Use the app directly in your desktop or mobile browser without any installation:
+- 🚀 **[Click Here to Open & Run in Browser](https://tanishksudani.github.io/tanishk_ai_bot/)**
 
-#### 🔹 Method A: Instant Home Screen App (PWA — Recommended for All Users)
+---
+
+### 🍏 3. iPhone / iOS Guide (Complete Step-by-Step)
+
+To run on your iPhone or iPad:
+- 🚀 **[Click Here to Run in your iPhone](https://tanishksudani.github.io/tanishk_ai_bot/)**
+
+#### 🔹 Method A: Instant Home Screen App (PWA — Recommended for All iPhone Users)
 *No Mac or Apple Developer Account needed. Works on 100% of iPhones:*
-1. Open the hosted Web App URL in **Safari** on your iPhone.
+1. Open 👉 **[https://tanishksudani.github.io/tanishk_ai_bot/](https://tanishksudani.github.io/tanishk_ai_bot/)** in **Safari** on your iPhone.
 2. Tap the **Share** button at the bottom of the screen (square box with an arrow pointing up).
 3. Scroll down in the menu and tap **"Add to Home Screen"** (`+`).
 4. Tap **"Add"** in the top right corner.

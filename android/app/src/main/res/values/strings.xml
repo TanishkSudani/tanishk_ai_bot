@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tanishk\'s AI Bot</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_calls">Calls</string>
+    <string name="nav_live">Live</string>
+    <string name="nav_settings">Settings</string>
+</resources>

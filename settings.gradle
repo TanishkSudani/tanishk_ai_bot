@@ -1,0 +1,2 @@
+rootProject.name = "Tanishk's AI Bot"
+include ':app'

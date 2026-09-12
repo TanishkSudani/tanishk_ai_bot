@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="Home"/>
+    <item
+        android:id="@+id/nav_calls"
+        android:icon="@android:drawable/ic_menu_call"
+        android:title="Calls"/>
+    <item
+        android:id="@+id/nav_live"
+        android:icon="@android:drawable/presence_audio_online"
+        android:title="Live"/>
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Settings"/>
+</menu>

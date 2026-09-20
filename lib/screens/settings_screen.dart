@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../config/app_colors.dart';
 import '../models/ai_settings_model.dart';
 import '../services/storage_service.dart';
+import 'guide_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -396,7 +397,61 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            // Help & User Guide Card
+            Container(
+              margin: const EdgeInsets.only(top: 16, bottom: 20),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.card,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
+              ),
+              child: Row(
+                children: [
+                  const Text('📖', style: TextStyle(fontSize: 24)),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'App User Guide & Tutorials',
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.text,
+                          ),
+                        ),
+                        Text(
+                          'નવા યુઝર માટે સ્ટેપ-બાય-સ્ટેપ ગાઈડ અને FAQs',
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            color: AppColors.sub,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.accent.withValues(alpha: 0.15),
+                      foregroundColor: AppColors.accent,
+                      elevation: 0,
+                      side: const BorderSide(color: AppColors.accent),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const GuideScreen()),
+                      );
+                    },
+                    child: const Text('Open Guide'),
+                  ),
+                ],
+              ),
+            ),
 
             // Save Button
             SizedBox(

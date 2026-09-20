@@ -9,6 +9,7 @@ import '../widgets/section_header.dart';
 import '../widgets/call_list_tile.dart';
 import 'live_screen.dart';
 import 'chat_screen.dart';
+import 'guide_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -106,6 +107,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ],
                     ),
                     const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const GuideScreen()),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.accent.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text('📖', style: TextStyle(fontSize: 14)),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Guide',
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.accent,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
@@ -113,9 +146,65 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: AppColors.border),
                       ),
-                      child: const Text('🔔', style: TextStyle(fontSize: 20)),
+                      child: const Text('🔔', style: TextStyle(fontSize: 18)),
                     ),
                   ],
+                ),
+              ),
+            ),
+
+            // User Onboarding Guide Banner
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const GuideScreen()),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Text('💡', style: TextStyle(fontSize: 20)),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'New User? Tap for App Guide (માર્ગદર્શિકા)',
+                                style: GoogleFonts.inter(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.text,
+                                ),
+                              ),
+                              Text(
+                                'Step-by-step tutorial on Live Calling, WhatsApp & Settings',
+                                style: GoogleFonts.inter(
+                                  fontSize: 10,
+                                  color: AppColors.sub,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: AppColors.accent),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),

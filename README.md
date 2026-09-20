@@ -69,27 +69,58 @@ Use the app directly in your desktop or mobile browser without any installation:
 
 ## ✨ Features
 
-- 📞 **AI Voice Calling**: Auto-answers business calls with Twilio & Deepgram Nova-2 speech-to-text.
-- 🔴 **Live Call Monitoring**: Real-time waveform visualizer, live Deepgram transcripts, and hold/mute controls.
-- 💚 **Instant WhatsApp Summaries**: Dispatches concise, structured call summaries to the business owner.
-- 🌐 **Multilingual**: Auto-detects caller language (Gujarati, Hindi, English, Tamil).
+- 📞 **Interactive Live AI Voice Calling**: Real-time microphone audio capture, natural conversational responses, and Text-to-Speech (TTS) voice synthesis.
+- 🤖 **Google Gemini & Cloud AI**: Direct Gemini 1.5/2.0 Flash reasoning engine with built-in instant multilingual business fallback.
+- 🔴 **Live Call Monitoring**: Dynamic frequency audio waveform visualizer synced to speech, live transcripts, mute mic, and call hold controls.
+- 💚 **Instant WhatsApp Summaries**: 1-Tap automated dispatch of formatted call summaries & action items to the business owner.
+- 🌐 **True Multilingual Intelligence**: Auto-detects caller language (Gujarati ગુજરાતી, Hindi हिन्दी, English).
 - 🚀 **Deployment Hub**: Twilio voice webhook connector and live incoming call simulator.
-- ⚙️ **AI Settings**: Persistent credentials for Twilio, Anthropic Claude 3.5, and Deepgram.
+- ⚙️ **AI Settings**: Persistent credentials for Gemini API, Twilio, Anthropic Claude, and Deepgram.
 
 ---
 
-## 🛠️ Project Structure
+## 🛠️ Professional Project Structure
 
 ```text
 tanishk_ai_bot/
-├── lib/                   ← Main Flutter codebase (screens, widgets, models)
-├── assets/                ← Assets and branding
-├── android/               ← Production Flutter Android runner
-├── ios/                   ← Production Flutter iOS runner
-├── web/                   ← Production Flutter Web runner (Chrome)
-├── releases/              ← Compiled release binaries (APK)
-├── pubspec.yaml           ← Dependencies & metadata
-└── README.md              ← Project overview & documentation
+├── lib/
+│   ├── config/                ← Design tokens, colors & system constants
+│   │   ├── app_colors.dart    ← High-contrast dark theme & neon gradients
+│   │   └── app_constants.dart ← Endpoints, sample data & exports
+│   ├── models/                ← Data models with full JSON serialization
+│   │   ├── call_model.dart    ← Historical call record model
+│   │   ├── call_session_state.dart ← Live call status & caller profiles
+│   │   ├── transcript_model.dart   ← Timestamped live speech transcript
+│   │   └── ai_settings_model.dart  ← App settings & cloud API credentials
+│   ├── services/              ← Core business logic & AI voice services
+│   │   ├── ai_service.dart    ← Multilingual Gemini AI & prompt engine
+│   │   ├── tts_service.dart   ← Text-to-Speech audio engine
+│   │   ├── speech_service.dart← Microphone speech recognition (STT)
+│   │   ├── call_session_service.dart ← Live call orchestrator & state machine
+│   │   ├── storage_service.dart    ← SharedPreferences call history & settings
+│   │   └── whatsapp_service.dart   ← WhatsApp digest deep linking & clipboard
+│   ├── widgets/               ← Reusable UI components
+│   │   ├── live_waveform.dart ← Dynamic reactive audio visualizer
+│   │   ├── live_call_card.dart← Active call monitor widget
+│   │   ├── call_list_tile.dart← Polished call list entry with badges
+│   │   └── stat_card.dart     ← Dashboard analytics card
+│   ├── screens/               ← Primary application screens
+│   │   ├── splash_screen.dart ← Animated branding launch
+│   │   ├── home_screen.dart   ← Bottom navigation shell
+│   │   ├── dashboard_screen.dart ← Live business metrics & active call card
+│   │   ├── live_screen.dart   ← Comprehensive interactive Live AI Call screen
+│   │   ├── calls_screen.dart  ← Call history with dynamic storage binding
+│   │   ├── chat_screen.dart   ← Call details & transcript review
+│   │   ├── deploy_screen.dart ← Twilio webhook config & live simulator
+│   │   └── settings_screen.dart ← AI API credentials & bot identity
+│   └── main.dart              ← Application entry point & service bootstrap
+├── assets/                    ← Branding assets and icons
+├── android/                   ← Production Android runner
+├── ios/                       ← Production iOS runner
+├── web/                       ← Production Web runner (Chrome)
+├── releases/                  ← Compiled release binaries (APK)
+├── pubspec.yaml               ← Dependencies & metadata
+└── README.md                  ← Comprehensive project documentation
 ```
 
 ---

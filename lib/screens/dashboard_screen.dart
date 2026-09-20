@@ -1,12 +1,14 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../models/app_constants.dart';
+import '../config/app_constants.dart';
+import '../services/call_session_service.dart';
+import '../services/storage_service.dart';
 import '../widgets/stat_card.dart';
 import '../widgets/live_call_card.dart';
 import '../widgets/section_header.dart';
 import '../widgets/call_list_tile.dart';
 import 'live_screen.dart';
+import 'chat_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -16,31 +18,45 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int _callSec = 134;
-  late Timer _timer;
+  final CallSessionService _callService = CallSessionService();
+  final StorageService _storage = StorageService();
 
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (mounted) setState(() => _callSec++);
+    _callService.addListener(_onUpdate);
+    _storage.init().then((_) {
+      if (mounted) setState(() {});
     });
+  }
+
+  void _onUpdate() {
+    if (mounted) setState(() {});
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _callService.removeListener(_onUpdate);
     super.dispose();
-  }
-
-  String get _timerStr {
-    final m = (_callSec ~/ 60).toString().padLeft(2, '0');
-    final s = (_callSec % 60).toString().padLeft(2, '0');
-    return '$m:$s';
   }
 
   @override
   Widget build(BuildContext context) {
+    final callerName = _callService.status == CallStatus.connected
+        ? _callService.caller.name
+        : 'Rahul Shah';
+    final callerPhone = _callService.status == CallStatus.connected
+        ? _callService.caller.phone
+        : '+91 98765 43210';
+    final callerLang = _callService.status == CallStatus.connected
+        ? _callService.detectedLanguage
+        : 'Gujarati';
+    final timerStr = _callService.status == CallStatus.connected
+        ? _callService.durationString
+        : '02:14';
+
+    final recentCalls = _storage.calls.isNotEmpty ? _storage.calls : todayCalls;
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
@@ -78,7 +94,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              'All systems live',
+                              'All systems live · Voice AI active',
                               style: GoogleFonts.inter(
                                 fontSize: 12,
                                 color: AppColors.green,
@@ -156,10 +172,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: LiveCallCard(
-                  name: 'Rahul Shah',
-                  number: '+91 98765 43210',
-                  language: 'Gujarati',
-                  timer: _timerStr,
+                  name: callerName,
+                  number: callerPhone,
+                  language: callerLang,
+                  timer: timerStr,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -188,13 +204,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   border: Border.all(color: AppColors.border),
                 ),
                 child: Column(
-                  children: todayCalls
+                  children: recentCalls
                       .take(4)
                       .map(
                         (c) => CallListTile(
                           call: c,
-                          isLast: c == todayCalls.take(4).last,
-                          onTap: () {},
+                          isLast: c == recentCalls.take(4).last,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ChatScreen(call: c),
+                              ),
+                            );
+                          },
                         ),
                       )
                       .toList(),
@@ -227,9 +250,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       _FlowArrow(),
                       _FlowNode(icon: '🎤', label: 'Deepgram', sub: 'Voice→Text', highlight: false),
                       _FlowArrow(),
-                      _FlowNode(icon: '🤖', label: 'Claude AI', sub: 'Understand', highlight: true),
+                      _FlowNode(icon: '🤖', label: 'Gemini AI', sub: 'Understand', highlight: true),
                       _FlowArrow(),
-                      _FlowNode(icon: '🔊', label: 'ElevenLabs', sub: 'Text→Voice', highlight: false),
+                      _FlowNode(icon: '🔊', label: 'Voice TTS', sub: 'Text→Voice', highlight: false),
                       _FlowArrow(),
                       _FlowNode(icon: '💚', label: 'WhatsApp', sub: 'Summary', highlight: true),
                     ],

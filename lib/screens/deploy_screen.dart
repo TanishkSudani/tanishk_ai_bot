@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../models/app_constants.dart';
+import '../config/app_constants.dart';
+import '../services/call_session_service.dart';
 import 'live_screen.dart';
 
 class DeployScreen extends StatefulWidget {
@@ -12,7 +13,7 @@ class DeployScreen extends StatefulWidget {
 }
 
 class _DeployScreenState extends State<DeployScreen> {
-  final String _webhookUrl = 'https://bot.tanishk-ai.com/api/v1/voice-webhook';
+  final String _webhookUrl = kDefaultWebhookUrl;
   String _selectedLanguage = 'Gujarati';
   bool _isTesting = false;
 
@@ -38,12 +39,26 @@ class _DeployScreenState extends State<DeployScreen> {
 
   void _simulateCall() {
     setState(() => _isTesting = true);
-    Future.delayed(const Duration(milliseconds: 900), () {
+
+    // Pick caller profile matching selected language
+    CallerProfile selectedProfile = CallerProfile.defaultCaller;
+    if (_selectedLanguage == 'Gujarati') {
+      selectedProfile = CallerProfile.sampleCallers[0];
+    } else if (_selectedLanguage == 'Hindi') {
+      selectedProfile = CallerProfile.sampleCallers[2];
+    } else if (_selectedLanguage == 'English') {
+      selectedProfile = CallerProfile.sampleCallers[3];
+    }
+
+    Future.delayed(const Duration(milliseconds: 700), () {
       if (mounted) {
         setState(() => _isTesting = false);
+        CallSessionService().startCall(profile: selectedProfile);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const LiveScreen()),
+          MaterialPageRoute(
+            builder: (_) => LiveScreen(initialCaller: selectedProfile),
+          ),
         );
       }
     });
@@ -119,7 +134,7 @@ class _DeployScreenState extends State<DeployScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _buildStat('Region', 'ap-south-1 (Mumbai)'),
-                      _buildStat('Voice Latency', '240 ms'),
+                      _buildStat('Voice Latency', '210 ms'),
                       _buildStat('Uptime', '99.98%'),
                     ],
                   ),
@@ -270,7 +285,7 @@ class _DeployScreenState extends State<DeployScreen> {
                             )
                           : const Icon(Icons.phone_in_talk_rounded, size: 18),
                       label: Text(
-                        _isTesting ? 'Initiating Simulation...' : 'Simulate Incoming Call Now',
+                        _isTesting ? 'Connecting Live AI...' : 'Simulate Incoming Live Call',
                         style: GoogleFonts.inter(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
@@ -306,7 +321,7 @@ class _DeployScreenState extends State<DeployScreen> {
                   const SizedBox(height: 12),
                   _buildCheckStep('1', 'Create account at Twilio & buy business phone number', true),
                   _buildCheckStep('2', 'Configure webhook URL in Twilio Phone Console', true),
-                  _buildCheckStep('3', 'Generate Claude 3.5 & Deepgram API keys', true),
+                  _buildCheckStep('3', 'Generate Gemini 1.5 or Claude 3.5 API keys', true),
                   _buildCheckStep('4', 'Verify WhatsApp Business Number & template approved', true),
                 ],
               ),

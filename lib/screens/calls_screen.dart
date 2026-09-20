@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../models/app_constants.dart';
+import '../config/app_constants.dart';
+import '../services/storage_service.dart';
 import '../widgets/call_list_tile.dart';
 import '../widgets/section_header.dart';
 import 'chat_screen.dart';
 
-class CallsScreen extends StatelessWidget {
+class CallsScreen extends StatefulWidget {
   const CallsScreen({super.key});
 
   @override
+  State<CallsScreen> createState() => _CallsScreenState();
+}
+
+class _CallsScreenState extends State<CallsScreen> {
+  final StorageService _storage = StorageService();
+
+  @override
+  void initState() {
+    super.initState();
+    _storage.init().then((_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final callsList = _storage.calls.isNotEmpty ? _storage.calls : todayCalls;
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
@@ -34,7 +52,7 @@ class CallsScreen extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'AI handled · Summaries below',
+                          'AI handled · Real-time summaries',
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             color: AppColors.sub,
@@ -56,7 +74,7 @@ class CallsScreen extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        'Filter',
+                        'Total: ${callsList.length}',
                         style: GoogleFonts.inter(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
@@ -70,7 +88,7 @@ class CallsScreen extends StatelessWidget {
             ),
 
             const SliverToBoxAdapter(
-              child: SectionHeader(title: 'Today'),
+              child: SectionHeader(title: 'Recent & Today'),
             ),
 
             SliverToBoxAdapter(
@@ -82,13 +100,13 @@ class CallsScreen extends StatelessWidget {
                   border: Border.all(color: AppColors.border),
                 ),
                 child: Column(
-                  children: todayCalls
+                  children: callsList
                       .asMap()
                       .entries
                       .map(
                         (e) => CallListTile(
                           call: e.value,
-                          isLast: e.key == todayCalls.length - 1,
+                          isLast: e.key == callsList.length - 1,
                           onTap: () {
                             Navigator.push(
                               context,
@@ -107,7 +125,7 @@ class CallsScreen extends StatelessWidget {
             const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
             const SliverToBoxAdapter(
-              child: SectionHeader(title: 'Yesterday'),
+              child: SectionHeader(title: 'Earlier History'),
             ),
 
             SliverToBoxAdapter(

@@ -33,6 +33,8 @@ dependencies:
 
   # Icons
   flutter_svg: ^2.0.9
+  flutter_tts: ^4.2.5
+  speech_to_text: ^6.6.0
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../models/app_constants.dart';
+import '../config/app_colors.dart';
+import '../models/ai_settings_model.dart';
+import '../services/storage_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -11,13 +12,16 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final _botNameCtrl = TextEditingController(text: 'Priya');
-  final _businessNameCtrl = TextEditingController(text: "Tanishk's AI Solutions");
-  final _waNumberCtrl = TextEditingController(text: '+91 98765 43210');
-  final _twilioSidCtrl = TextEditingController(text: 'AC_sample_twilio_sid_92834');
-  final _twilioTokenCtrl = TextEditingController(text: '••••••••••••••••••••••••');
-  final _claudeKeyCtrl = TextEditingController(text: 'sk-ant-sample-claude-key-8374');
-  final _deepgramKeyCtrl = TextEditingController(text: 'dg_sample_deepgram_key_1928');
+  final StorageService _storage = StorageService();
+
+  final _botNameCtrl = TextEditingController();
+  final _businessNameCtrl = TextEditingController();
+  final _waNumberCtrl = TextEditingController();
+  final _geminiKeyCtrl = TextEditingController();
+  final _twilioSidCtrl = TextEditingController();
+  final _twilioTokenCtrl = TextEditingController();
+  final _claudeKeyCtrl = TextEditingController();
+  final _deepgramKeyCtrl = TextEditingController();
 
   bool _autoLang = true;
   bool _sendWa = true;
@@ -32,40 +36,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _loadSettings() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      setState(() {
-        _botNameCtrl.text = prefs.getString('bot_name') ?? 'Priya';
-        _businessNameCtrl.text = prefs.getString('business_name') ?? "Tanishk's AI Solutions";
-        _waNumberCtrl.text = prefs.getString('wa_number') ?? '+91 98765 43210';
-        _twilioSidCtrl.text = prefs.getString('twilio_sid') ?? 'AC_sample_twilio_sid_92834';
-        _twilioTokenCtrl.text = prefs.getString('twilio_token') ?? '••••••••••••••••••••••••';
-        _claudeKeyCtrl.text = prefs.getString('claude_key') ?? 'sk-ant-sample-claude-key-8374';
-        _deepgramKeyCtrl.text = prefs.getString('deepgram_key') ?? 'dg_sample_deepgram_key_1928';
-        _autoLang = prefs.getBool('auto_lang') ?? true;
-        _sendWa = prefs.getBool('send_wa') ?? true;
-        _record = prefs.getBool('record') ?? true;
-        _urgentFlag = prefs.getBool('urgent_flag') ?? true;
-        _isLoading = false;
-      });
-    } catch (_) {
-      setState(() => _isLoading = false);
-    }
+    await _storage.init();
+    final s = _storage.settings;
+    setState(() {
+      _botNameCtrl.text = s.botName;
+      _businessNameCtrl.text = s.businessName;
+      _waNumberCtrl.text = s.waNumber;
+      _geminiKeyCtrl.text = s.geminiApiKey;
+      _twilioSidCtrl.text = s.twilioSid;
+      _twilioTokenCtrl.text = s.twilioToken;
+      _claudeKeyCtrl.text = s.claudeApiKey;
+      _deepgramKeyCtrl.text = s.deepgramKey;
+      _autoLang = s.autoLang;
+      _sendWa = s.sendWa;
+      _record = s.record;
+      _urgentFlag = s.urgentFlag;
+      _isLoading = false;
+    });
   }
 
   Future<void> _saveSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('bot_name', _botNameCtrl.text);
-    await prefs.setString('business_name', _businessNameCtrl.text);
-    await prefs.setString('wa_number', _waNumberCtrl.text);
-    await prefs.setString('twilio_sid', _twilioSidCtrl.text);
-    await prefs.setString('twilio_token', _twilioTokenCtrl.text);
-    await prefs.setString('claude_key', _claudeKeyCtrl.text);
-    await prefs.setString('deepgram_key', _deepgramKeyCtrl.text);
-    await prefs.setBool('auto_lang', _autoLang);
-    await prefs.setBool('send_wa', _sendWa);
-    await prefs.setBool('record', _record);
-    await prefs.setBool('urgent_flag', _urgentFlag);
+    final updated = AiSettingsModel(
+      botName: _botNameCtrl.text.trim(),
+      businessName: _businessNameCtrl.text.trim(),
+      waNumber: _waNumberCtrl.text.trim(),
+      geminiApiKey: _geminiKeyCtrl.text.trim(),
+      twilioSid: _twilioSidCtrl.text.trim(),
+      twilioToken: _twilioTokenCtrl.text.trim(),
+      claudeApiKey: _claudeKeyCtrl.text.trim(),
+      deepgramKey: _deepgramKeyCtrl.text.trim(),
+      autoLang: _autoLang,
+      sendWa: _sendWa,
+      record: _record,
+      urgentFlag: _urgentFlag,
+    );
+
+    await _storage.saveSettings(updated);
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -75,7 +81,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const Icon(Icons.check_circle_rounded, color: AppColors.green),
               const SizedBox(width: 8),
               Text(
-                'Settings saved successfully!',
+                'Settings & AI credentials saved successfully!',
                 style: GoogleFonts.inter(fontWeight: FontWeight.w600),
               ),
             ],
@@ -92,6 +98,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _botNameCtrl.dispose();
     _businessNameCtrl.dispose();
     _waNumberCtrl.dispose();
+    _geminiKeyCtrl.dispose();
     _twilioSidCtrl.dispose();
     _twilioTokenCtrl.dispose();
     _claudeKeyCtrl.dispose();
@@ -105,6 +112,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     required TextEditingController controller,
     bool obscureText = false,
     IconData? icon,
+    String? helperText,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,6 +133,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           decoration: InputDecoration(
             prefixIcon: icon != null ? Icon(icon, size: 18, color: AppColors.sub) : null,
             hintText: hint,
+            helperText: helperText,
+            helperStyle: GoogleFonts.inter(fontSize: 10, color: AppColors.muted),
           ),
         ),
         const SizedBox(height: 14),
@@ -182,7 +192,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (_isLoading) {
       return const Scaffold(
         backgroundColor: AppColors.bg,
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: CircularProgressIndicator(color: AppColors.accent)),
       );
     }
 
@@ -245,7 +255,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   _buildField(
                     label: 'Business Name',
-                    hint: 'e.g. Tanishk Store',
+                    hint: 'e.g. Tanishk AI Solutions',
                     controller: _businessNameCtrl,
                     icon: Icons.business_outlined,
                   ),
@@ -254,6 +264,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     hint: '+91 98765 43210',
                     controller: _waNumberCtrl,
                     icon: Icons.phone_android_outlined,
+                    helperText: 'Call summaries will be formatted and dispatched to this WhatsApp',
                   ),
                 ],
               ),
@@ -261,7 +272,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             const SizedBox(height: 16),
 
-            // Cloud API Credentials
+            // AI Models & Cloud API Keys
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -274,10 +285,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   Row(
                     children: [
-                      const Text('🔑', style: TextStyle(fontSize: 20)),
+                      const Text('✨', style: TextStyle(fontSize: 20)),
                       const SizedBox(width: 8),
                       Text(
-                        'API Keys & Cloud Connectors',
+                        'Google Gemini & AI Engines',
                         style: GoogleFonts.inter(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -287,6 +298,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
+                  _buildField(
+                    label: 'Google Gemini API Key (Recommended)',
+                    hint: 'AIzaSy...',
+                    controller: _geminiKeyCtrl,
+                    obscureText: true,
+                    icon: Icons.auto_awesome_rounded,
+                    helperText: 'Enables live Gemini 1.5/2.0 voice reasoning in Gujarati, Hindi & English',
+                  ),
+                  _buildField(
+                    label: 'Claude API Key (Anthropic)',
+                    hint: 'sk-ant-api03-...',
+                    controller: _claudeKeyCtrl,
+                    obscureText: true,
+                    icon: Icons.psychology_outlined,
+                  ),
                   _buildField(
                     label: 'Twilio Account SID',
                     hint: 'ACxxxxxxxxxxxxxxx',
@@ -299,13 +325,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     controller: _twilioTokenCtrl,
                     obscureText: true,
                     icon: Icons.lock_outline,
-                  ),
-                  _buildField(
-                    label: 'Claude API Key (Anthropic)',
-                    hint: 'sk-ant-api03-...',
-                    controller: _claudeKeyCtrl,
-                    obscureText: true,
-                    icon: Icons.auto_awesome_outlined,
                   ),
                   _buildField(
                     label: 'Deepgram Key (Voice AI)',
@@ -348,28 +367,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const SizedBox(height: 10),
                   _buildSwitch(
                     title: 'Auto-detect Language',
-                    subtitle: 'Switches between Gujarati, Hindi, English, Tamil dynamically',
+                    subtitle: 'Switches between Gujarati, Hindi, English dynamically',
                     value: _autoLang,
                     onChanged: (v) => setState(() => _autoLang = v),
                   ),
                   const Divider(color: AppColors.border),
                   _buildSwitch(
-                    title: 'Auto Send WhatsApp Summary',
-                    subtitle: 'Dispatches instant call digest to your WhatsApp number',
+                    title: 'Auto WhatsApp Summary Prompt',
+                    subtitle: 'Shows instant 1-tap WhatsApp digest when live call ends',
                     value: _sendWa,
                     onChanged: (v) => setState(() => _sendWa = v),
                   ),
                   const Divider(color: AppColors.border),
                   _buildSwitch(
-                    title: 'Record Call Audio',
-                    subtitle: 'Saves full audio for review and quality control',
+                    title: 'Record Live Transcripts',
+                    subtitle: 'Saves full audio transcripts to local call history',
                     value: _record,
                     onChanged: (v) => setState(() => _record = v),
                   ),
                   const Divider(color: AppColors.border),
                   _buildSwitch(
                     title: 'Urgent Escalation Alerts',
-                    subtitle: 'Sends high priority notification if caller needs owner',
+                    subtitle: 'Highlights calls requiring immediate owner follow-up',
                     value: _urgentFlag,
                     onChanged: (v) => setState(() => _urgentFlag = v),
                   ),

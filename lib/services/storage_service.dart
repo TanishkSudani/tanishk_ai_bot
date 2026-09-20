@@ -81,8 +81,12 @@ class StorageService {
 
   Future<void> addCall(CallModel call) async {
     _calls.insert(0, call);
-    final prefs = await SharedPreferences.getInstance();
-    final jsonList = _calls.map((c) => c.toJson()).toList();
-    await prefs.setString(_keyCalls, jsonEncode(jsonList));
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final jsonList = _calls.map((c) => c.toJson()).toList();
+      await prefs.setString(_keyCalls, jsonEncode(jsonList));
+    } catch (_) {
+      // In-memory list is always preserved
+    }
   }
 }

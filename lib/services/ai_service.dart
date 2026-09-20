@@ -20,24 +20,29 @@ class AiService {
     final hasHindiScript = RegExp(r'[\u0900-\u097F]').hasMatch(text);
     if (hasHindiScript) return 'Hindi';
 
-    // Check Gujarati Roman keywords
-    final gujaratiWords = [
+    // Tokenize text into words
+    final words = lower.split(RegExp(r'[^a-zA-Z0-9]+')).where((w) => w.isNotEmpty).toSet();
+    int gujaratiMatches = 0;
+    int hindiMatches = 0;
+
+    const gujaratiSet = {
       'kem', 'cho', 'tamare', 'tamaro', 'maro', 'nathi', 'aavyo', 'aavse',
       'shu', 'su', 'saru', 'bhai', 'ha', 'haa', 'kaho', 'bol', 'paisa', 'bhaav',
       'aavshe', 'kyare', 'jovu', 'malse', 'swagat', 'krupa', 'chhe', '6e', 'thase'
-    ];
-    for (final word in gujaratiWords) {
-      if (lower.contains(word)) return 'Gujarati';
+    };
+
+    const hindiSet = {
+      'namaste', 'kaise', 'ho', 'mera', 'meri', 'mere', 'aayega', 'kya', 'kab', 'batao',
+      'chahiye', 'bhaiya', 'kitna', 'hoga', 'kahan', 'pahuncha', 'baat', 'karni', 'hai'
+    };
+
+    for (final w in words) {
+      if (gujaratiSet.contains(w)) gujaratiMatches++;
+      if (hindiSet.contains(w)) hindiMatches++;
     }
 
-    // Check Hindi Roman keywords
-    final hindiWords = [
-      'namaste', 'kaise', 'ho', 'mera', 'meri', 'aayega', 'kya', 'kab', 'batao',
-      'chahiye', 'bhaiya', 'kitna', 'hoga', 'order', 'kahan', 'pahuncha', 'baat'
-    ];
-    for (final word in hindiWords) {
-      if (lower.contains(word)) return 'Hindi';
-    }
+    if (gujaratiMatches > 0 && gujaratiMatches >= hindiMatches) return 'Gujarati';
+    if (hindiMatches > 0) return 'Hindi';
 
     return 'English';
   }
